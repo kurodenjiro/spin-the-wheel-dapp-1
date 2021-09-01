@@ -1,6 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { BrowserRouter ,HashRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { App } from './App'
 import './index.css'
@@ -11,9 +12,9 @@ const queryClient = new QueryClient()
 
 ReactDOM.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
+    <BrowserRouter basename="/">
       <App />
-    </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),
 )
