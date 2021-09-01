@@ -23,30 +23,35 @@ export const CasinoWheelPage: FC = () => {
 
   const queryClient = useQueryClient()
 
-  const [prizes, setPrizes] = useState(['1', '2', '3'])
+  const [prizes, setPrizes] = useState([''])
   const wheelRef = useRef<WheelRef>(null)
+
 
   useEffect(() => {
 
-    const getPrizes = casino.methods.getPrizes().call().then(function(result){
-      console.log(result);
-      setPrizes(result)
-    })
+  const getPrizes = casino.methods.getPrizes().call().then(function(result){
+    
+ 
+    setPrizes(result)
+  })
 
     const subscription = casino.events.WheelSpin(async (error, data) => {
       if (error != null) {
         console.error(error)
         return
       }
-      console.log(data.returnValues.wonPrizeIndex);
+      if(data.returnValues.player == account){
+        const wonPrizeIndex = new BN(data.returnValues.wonPrizeIndex).toNumber()
+        //const potentialPrizes = data.returnValues.prizes.map(p => fromWei(p))
+        // Shuffle all prizes except the prize at index `wonPrizeIndex`
+        const shuffledPrizes = shuffleExceptAt(data.returnValues.prizes, wonPrizeIndex)
+        setPrizes(shuffledPrizes)
+        await wheelRef.current?.spinToIndex(wonPrizeIndex, 5)
+        await queryClient.invalidateQueries('balance')
+
+      }
       
-      const wonPrizeIndex = new BN(data.returnValues.wonPrizeIndex).toNumber()
-     // const potentialPrizes = data.returnValues.prizes.map(p => fromWei(p))
-      // Shuffle all prizes except the prize at index `wonPrizeIndex`
-      const shuffledPrizes = shuffleExceptAt(data.returnValues.prizes, wonPrizeIndex)
-      setPrizes(shuffledPrizes)
-      await wheelRef.current?.spinToIndex(wonPrizeIndex, 5)
-      await queryClient.invalidateQueries('balance')
+   
     }) as unknown as Subscription<unknown>
     return () => {
       subscription.unsubscribe()
@@ -67,7 +72,7 @@ export const CasinoWheelPage: FC = () => {
                 initialValues={{ amount: '0.05' }}
                 validationSchema={casinoWheelSchema}
                 onSubmit={async ({ amount }, { resetForm }) => {
-                  await casino.methods.spinWheel().send({ from: account, value: toWei(amount) })
+                  await casino.methods.spinWheel().send({ from: account, value: toWei(amount),gasPrice:12 })
                   resetForm()
                 }}
               >
@@ -77,7 +82,6 @@ export const CasinoWheelPage: FC = () => {
                       name="amount"
                       label="Bet amount"
                       placeholder="Enter your bet"
-                      disabled
                       append={<InputGroup.Text>BNB</InputGroup.Text>}
                     />
                     <FormButton>Spin the wheel</FormButton>
@@ -88,6 +92,9 @@ export const CasinoWheelPage: FC = () => {
                 <Wheel ref={wheelRef} prizes={prizes} />
               </div>
             </Card.Body>
+            <Card.Footer as="h5">
+              RoboBUSD:
+            </Card.Footer>
           </Card>
         </div>
       </Container>

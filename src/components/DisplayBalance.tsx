@@ -26,5 +26,5 @@ export const DisplayBalance: FC = () => {
     return <div>Idle...</div>
   }
 
-  return <div>Your balance: {fromWei(balance.data)}</div>
+  return <div>Your balance: {fromWei(balance.data)} BNB</div>
 }
