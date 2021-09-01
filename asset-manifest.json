@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/spin-the-wheel-dapp-1/static/css/main.2ae47eeb.chunk.css",
-    "main.js": "/spin-the-wheel-dapp-1/static/js/main.baf293c7.chunk.js",
-    "main.js.map": "/spin-the-wheel-dapp-1/static/js/main.baf293c7.chunk.js.map",
+    "main.js": "/spin-the-wheel-dapp-1/static/js/main.a785ea22.chunk.js",
+    "main.js.map": "/spin-the-wheel-dapp-1/static/js/main.a785ea22.chunk.js.map",
     "runtime-main.js": "/spin-the-wheel-dapp-1/static/js/runtime-main.f808b30b.js",
     "runtime-main.js.map": "/spin-the-wheel-dapp-1/static/js/runtime-main.f808b30b.js.map",
     "static/css/2.27dd871e.chunk.css": "/spin-the-wheel-dapp-1/static/css/2.27dd871e.chunk.css",
@@ -21,6 +21,6 @@
     "static/css/2.27dd871e.chunk.css",
     "static/js/2.9b31db68.chunk.js",
     "static/css/main.2ae47eeb.chunk.css",
-    "static/js/main.baf293c7.chunk.js"
+    "static/js/main.a785ea22.chunk.js"
   ]
 }
