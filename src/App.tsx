@@ -22,7 +22,7 @@ export const App: FC = () => {
     const casino = new web3.eth.Contract(
      
       Casino.abi  as AbiItem[],
-      "0x587851075160107c06c8586565da59cf82ee4ef4",
+      "0x8c3bcb0a7a470984af97aca342b1f3af678d52f9",
     ) as unknown as CasinoType
 
     return {
