@@ -17,6 +17,8 @@ export const TextField: FC<TextFieldProps> = ({ label, append, ...props }) => {
           type="text" {...field}
           placeholder={props.placeholder}
           isInvalid={meta.touched && meta.error != null}
+          
+          disabled={true}
         />
         {append && <InputGroup.Append>{append}</InputGroup.Append>}
         <Form.Control.Feedback type="invalid">

@@ -27,15 +27,23 @@ export const CasinoWheelPage: FC = () => {
   const wheelRef = useRef<WheelRef>(null)
 
   useEffect(() => {
+
+    const getPrizes = casino.methods.getPrizes().call().then(function(result){
+      console.log(result);
+      setPrizes(result)
+    })
+
     const subscription = casino.events.WheelSpin(async (error, data) => {
       if (error != null) {
         console.error(error)
         return
       }
+      console.log(data.returnValues.wonPrizeIndex);
+      
       const wonPrizeIndex = new BN(data.returnValues.wonPrizeIndex).toNumber()
-      const potentialPrizes = data.returnValues.potentialPrizes.map(p => fromWei(p))
+     // const potentialPrizes = data.returnValues.prizes.map(p => fromWei(p))
       // Shuffle all prizes except the prize at index `wonPrizeIndex`
-      const shuffledPrizes = shuffleExceptAt(potentialPrizes, wonPrizeIndex)
+      const shuffledPrizes = shuffleExceptAt(data.returnValues.prizes, wonPrizeIndex)
       setPrizes(shuffledPrizes)
       await wheelRef.current?.spinToIndex(wonPrizeIndex, 5)
       await queryClient.invalidateQueries('balance')
@@ -56,7 +64,7 @@ export const CasinoWheelPage: FC = () => {
             </Card.Header>
             <Card.Body>
               <Formik
-                initialValues={{ amount: '' }}
+                initialValues={{ amount: '0.05' }}
                 validationSchema={casinoWheelSchema}
                 onSubmit={async ({ amount }, { resetForm }) => {
                   await casino.methods.spinWheel().send({ from: account, value: toWei(amount) })
@@ -69,7 +77,8 @@ export const CasinoWheelPage: FC = () => {
                       name="amount"
                       label="Bet amount"
                       placeholder="Enter your bet"
-                      append={<InputGroup.Text>ETH</InputGroup.Text>}
+                      disabled
+                      append={<InputGroup.Text>BNB</InputGroup.Text>}
                     />
                     <FormButton>Spin the wheel</FormButton>
                   </Form>

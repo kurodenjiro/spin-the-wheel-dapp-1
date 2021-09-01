@@ -5,6 +5,7 @@ import { Casino as CasinoType } from './types/casino'
 import Casino from './contracts/casino.json'
 import { getWeb3 } from './getWeb3'
 import { CasinoWheelPage } from './pages/CasinoWheelPage'
+import { AbiItem } from 'web3-utils'
 
 export const Web3Context = createContext(undefined as unknown as Web3)
 export const AccountContext = createContext(undefined as unknown as string)
@@ -16,14 +17,12 @@ export const App: FC = () => {
     const accounts = await web3.eth.getAccounts()
     const account = accounts[0]
 
-    // Get contract instance
-    const networkId = await web3.eth.net.getId()
-    // @ts-expect-error
-    const deployedNetwork = Casino.networks[networkId]
+    
+    //const deployedNetwork = Casino.networks[networkId]
     const casino = new web3.eth.Contract(
-      // @ts-expect-error
-      Casino.abi,
-      deployedNetwork && deployedNetwork.address,
+     
+      Casino.abi  as AbiItem[],
+      "0x3A88c9D0973D7f0AD12491f376D3BcB2B6Fc6472",
     ) as unknown as CasinoType
 
     return {
